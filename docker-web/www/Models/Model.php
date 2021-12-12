@@ -44,7 +44,9 @@ class Model
         }
         try{
             $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@localhost:27017");
-            $this->collection = $this->mongo->selectCollection('darwin_inventors');
+            var_dump($this->mongo);
+            $this->collection = $this->mongo->darwin_inventors->darwin_inventors;
+            var_dump($this->collection);
         }
         catch(Exception $e){
             die('Echec connexion MONGODB, erreur n°' . $e->getCode() . ':' . $e->getMessage());
