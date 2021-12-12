@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+    web-nginx:
+        image: nginx:stable-alpine
+        container_name: web-nginx
+        volumes:
+            - "./docker-web/www:/usr/share/nginx/html:ro"
+            - "./docker-web/log:/var/log/nginx"
+            - "./docker-web/nginx.conf:/etc/nginx/nginx.conf:ro"
+        ports:
+            - "127.0.0.1:80:80"
+
+    web-php:
+        build:
+            context: ./docker-web/dockerfiles
+            dockerfile: .build-php
+        container_name: web-php
+        volumes:
+            - "./docker-web/www:/script:ro"
+        environment:
+            MONGODB_CONNSTRING: mongodb+srv://genius:darwin@mongodb
+
+    web-pgsql:
+        image: postgres:alpine
+        container_name: web-pgsql
+        volumes:
+            - "./docker-web/data:/var/lib/postgresql/data"
+            - "./docker-web/init/database_nobel_psql.sql:/docker-entrypoint-initdb.d/database_nobel_psql.sql"
+        environment:
+            POSTGRES_USER: remi
+            POSTGRES_PASSWORD: Motdepasse95
+            POSTGRES_DB: nobel_prices
+    
+    web-mongodb:
+        image: mongo:latest
+        container_name: my-mongoDB
+        environment:
+            MONGO_INITDB_DATABASE: darwin_inventors
+            MONGO_INITDB_ROOT_USERNAME: genius
+            MONGO_INITDB_ROOT_PASSWORD: darwin
+        ports: 
+            - 27017:27017
+        volumes:
+            - ./docker-web/Mongo_data:/data/db
+            #- mongo-config:/data/configdb
+
+
