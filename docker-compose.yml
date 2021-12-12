@@ -34,7 +34,7 @@ services:
     
     web-mongodb:
         image: mongo:latest
-        container_name: my-mongoDB
+        container_name: web-mongoDB
         environment:
             MONGO_INITDB_DATABASE: darwin_inventors
             MONGO_INITDB_ROOT_USERNAME: genius
@@ -43,6 +43,7 @@ services:
             - 27017:27017
         volumes:
             - ./docker-web/Mongo_data:/data/db
+            - ./mongodb-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
             #- mongo-config:/data/configdb
 
 
