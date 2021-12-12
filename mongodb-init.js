@@ -7,7 +7,7 @@ let res = [
             pwd: "darwin",
             roles: [
                 {
-                    role: "readWrite",
+                    role: "dbOwner",
                     db: "darwin_inventors"
                 }
             ]

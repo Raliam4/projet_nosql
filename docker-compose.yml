@@ -35,6 +35,9 @@ services:
     web-mongodb:
         image: mongo:latest
         container_name: web-mongoDB
+        build:
+            context: ./docker-web/dockerfiles
+            dockerfile: .build-mongodb
         environment:
             MONGO_INITDB_DATABASE: darwin_inventors
             MONGO_INITDB_ROOT_USERNAME: genius
@@ -45,5 +48,4 @@ services:
             - ./docker-web/Mongo_data:/data/db
             - ./mongodb-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
             #- mongo-config:/data/configdb
-
-
+        restart: always
