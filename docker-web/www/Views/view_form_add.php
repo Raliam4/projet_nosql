@@ -6,7 +6,6 @@
 			<p> <label> Birth Date: <input type="text" name="birthdate"/></label> </p>
 			<p> <label> Birth Place: <input type="text" name="birthplace"/> </label></p>
 			<p> <label> County: <input type="text" name="county"/></label> </p>
-			<p> <label> Story: <input type="text" name="story"/></label></p>
 
 			<p>
 				<label> <input type="radio" name="category" value="chemistry" /> Chemistry </label>

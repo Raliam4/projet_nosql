@@ -42,15 +42,50 @@ class Model
         } catch (PDOException $e) {
             die('Echec connexion, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
+
+        try {
+
+            $link = new MongoDB();
+
+            $mng = new MongoDB\Client("mongodb://genius:darwin@localhost:27017");
+
+            var_dump($mng);
+
+            $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@localhost:27017");
+        
+            $listdatabases = new MongoDB\Driver\Command(["listDatabases" => 1]);
+            $res = $this->mongo->executeCommand("admin", $listdatabases);
+        
+            $databases = current($res->toArray());
+        
+            foreach ($databases->databases as $el) {
+            
+                echo $el->name . "\n";
+            }
+        
+        } catch (MongoDB\Driver\Exception\Exception $e) {
+        
+            $filename = basename(__FILE__);
+            
+            echo "The $filename script has experienced an error.\n"; 
+            echo "It failed with the following exception:\n";
+            
+            echo "Exception:", $e->getMessage(), "\n";
+            echo "In file:", $e->getFile(), "\n";
+            echo "On line:", $e->getLine(), "\n";       
+        }
+/*
+
         try{
             $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@localhost:27017");
             var_dump($this->mongo);
-            $this->collection = $this->mongo->darwin_inventors->darwin_inventors;
-            var_dump($this->collection);
+            $dbs = $this->mongo->listDatabases();
+            var_dump($dbs);
         }
         catch(Exception $e){
             die('Echec connexion MONGODB, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
+*/
     }
 
 
@@ -183,10 +218,10 @@ class Model
 
         try {
             //Préparation de la requête
-            $requete = $this->bd->prepare('INSERT INTO nobels (year, category, name, birthdate, birthplace, county, motivation, story) VALUES (:year, :category, :name, :birthdate, :birthplace, :county, :motivation, :story)');
+            $requete = $this->bd->prepare('INSERT INTO nobels (year, category, name, birthdate, birthplace, county, motivation) VALUES (:year, :category, :name, :birthdate, :birthplace, :county, :motivation)');
 
             //Remplacement des marqueurs de place par les valeurs
-            $marqueurs = ['year', 'category', 'name', 'birthdate','birthplace', 'county', 'motivation', 'story'];
+            $marqueurs = ['year', 'category', 'name', 'birthdate','birthplace', 'county', 'motivation'];
             foreach ($marqueurs as $value) {
                 $requete->bindValue(':' . $value, $infos[$value]);
             }
@@ -209,10 +244,10 @@ class Model
 
         try {
             //Préparation de la requête
-            $requete = $this->bd->prepare('UPDATE nobels SET year = :year, category = :category, name = :name, birthdate = :birthdate, birthplace = :birthplace, county = :county, motivation = :motivation, story = :story WHERE id = :id');
+            $requete = $this->bd->prepare('UPDATE nobels SET year = :year, category = :category, name = :name, birthdate = :birthdate, birthplace = :birthplace, county = :county, motivation = :motivation WHERE id = :id');
 
             //Remplacement des marqueurs de place par les valeurs
-            $marqueurs = ['id','year', 'category', 'name', 'birthdate','birthplace', 'county', 'motivation', 'story'];
+            $marqueurs = ['id','year', 'category', 'name', 'birthdate','birthplace', 'county', 'motivation'];
             foreach ($marqueurs as $value) {
                 $requete->bindValue(':' . $value, $infos[$value]);
             }
