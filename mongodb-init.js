@@ -10,14 +10,9 @@ db.createUser(
         ]
     }
 );
-//db = new Mongo().getDB("darwin_inventors");
-print(db);
 db.darwin_inventors.drop();
-print(db);
 db.createCollection('darwin_inventors');
-print(db);
 db.darwin_inventors.insert({name: "William Nelson", domain:"Automobile", company: "General Electric", invention: "motoriser des bicyclettes", death_cause: "Est tombé d'un prototype durant un essai."});
-print(db);
 db.darwin_inventors.insert({name: "Ismail ibn Hammad al-Jawhari", domain:"Aviation", death_date: "year 1003-1010", nationality: "Turc", death_cause: "A tenté de voler à l'aide de deux ailes en bois et d'une corde."});
 db.darwin_inventors.insert({name: "Jean-François Pilâtre de Rozier", domain:"Aviation", death_date: "15 juin 1785", death_cause: "Crash aérien alors qu'il tente avec Pierre-Ange Romain de traverser la Manche en ballon."});
 db.darwin_inventors.insert({name: "Otto Lilienthal", birthday: "1848", death_date: "1896", death_cause: "Meurt le lendemain d'un accident pendant lequel il s'écrase avec l'un de ses deltaplanes3."});
