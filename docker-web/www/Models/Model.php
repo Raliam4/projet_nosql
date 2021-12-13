@@ -35,7 +35,7 @@ class Model
         try {
             echo "<p>\n constructeur model \n</p><br/>";
             //include 'Utils/credentials.php';
-            $this->bd = new PDO('pgsql:host=web-pgsql;port=5432;dbname=nobel_prices', 'remi', 'Motdepasse95');
+            $this->bd = new PDO('pgsql:host=web-pgsql;port=5432;dbname=nobel_prices', 'toto', 'toto');
             echo "<p>connection reussi !!!!!!! </p><br/>";
             $this->bd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->bd->query("SET nameS 'utf8'");

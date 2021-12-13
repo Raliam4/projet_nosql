@@ -28,16 +28,13 @@ services:
             - "./docker-web/data:/var/lib/postgresql/data"
             - "./docker-web/init/database_nobel_psql.sql:/docker-entrypoint-initdb.d/database_nobel_psql.sql"
         environment:
-            POSTGRES_USER: remi
-            POSTGRES_PASSWORD: Motdepasse95
+            POSTGRES_USER: toto
+            POSTGRES_PASSWORD: toto
             POSTGRES_DB: nobel_prices
     
     web-mongodb:
         image: mongo:latest
         container_name: web-mongoDB
-        build:
-            context: ./docker-web/dockerfiles
-            dockerfile: .build-mongodb
         environment:
             MONGO_INITDB_DATABASE: darwin_inventors
             MONGO_INITDB_ROOT_USERNAME: genius

@@ -1,3 +1,4 @@
 FROM mongo:latest
 
-COPY /mongodb-init.js /docker-entrypoint-initdb.d/
+COPY mongodb-init.js /docker-entrypoint-initdb.d/
+#RUN mongoimport --type json -d test -c products --authenticationDatabase darwin_inventors --username genius --password darwin  --headerline --drop /docker-web/init/mongodb.json
