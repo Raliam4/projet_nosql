@@ -31,6 +31,7 @@ class Model
      */
     private function __construct()
     {
+        
         try {
             echo "<p>\n constructeur model \n</p><br/>";
             //include 'Utils/credentials.php';
