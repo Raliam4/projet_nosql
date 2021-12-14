@@ -43,13 +43,114 @@ class Model
             die('Echec connexion, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
         try{
-            $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@localhost:27017");
-            var_dump($this->mongo);
-            $this->collection = $this->mongo->darwin_inventors->darwin_inventors;
-            var_dump($this->collection);
+            $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@web-mongoDB:27017/darwin_inventors");
+            $res = $this->getDarwinInventors();
+            var_dump($res);
+            //printf("Test1\n");
+            //var_dump($this->mongo);
+            //printf("Test2\n");
+            //$this->collection = $this->mongo->darwin_inventors;
+            //var_dump($this->collection);
+            //printf("Test3\n");
+            /*
+            $filter = [];
+            $options = [];
+            $query = new MongoDB\Driver\Query($filter, $options);
+            $cursor = $this->mongo->executeQuery("darwin_inventors.darwin_inventors", $query);
+            $result = [];
+            foreach ($cursor as $document) {
+                $result.append($result, $document);
+            }
+            var_dump($result);
+            */
+            /* FONCTIONNE
+            $query = new MongoDB\Driver\Query([]);
+            $rows = $this->mongo->executeQuery("darwin_inventors.darwin_inventors", $query);
+            $i = 0;
+            print $i;
+            foreach ($rows as $row) {
+                print $i;
+                if($row->name){
+                    print $row->name;
+                }
+                //print $row[1];
+                $i = $i +1;
+            }
+            */
+            
+            
+            /*
+            $filter = ['users' => 'genius'];
+            $options = [
+                'sort' => ['_id' => -1],
+            ];
+            $query = new MongoDB\Driver\Query($filter, $options);
+            $cursor = $this->mongo->executeQuery('mydb.mycol', $query);
+            foreach ($cursor as $document) {
+                var_dump($document);
+            }*/
         }
         catch(Exception $e){
             die('Echec connexion MONGODB, erreur n°' . $e->getCode() . ':' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Retourne les darwin inventors
+     * @return [array] Contient les informations des darwin inventors
+     */
+    public function getDarwinInventors() {
+        try {
+            /*
+            $query = new MongoDB\Driver\Query([]);
+            $rows = $this->mongo->executeQuery("darwin_inventors.darwin_inventors", $query);
+            $i = 0;
+            print $i;
+            foreach ($rows as $row) {
+                print $i;
+                if($row->name){
+                    print $row->name;
+                }
+                //print $row[1];
+                $i = $i +1;
+            }
+            */
+            $filter = [];
+            $options = [];
+            $query = new MongoDB\Driver\Query($filter, $options);
+            $cursor = $this->mongo->executeQuery("darwin_inventors.darwin_inventors", $query);
+            $result = [];
+            foreach ($cursor as $document) {
+                //var_dump($document);
+                //print(gettype($document->name));
+                print("Test ici");
+                $entry = json_decode(json_encode($document), true);
+                //print($entry["name"]);
+                print("Test here");
+                if(array_key_exists("name", $entry)) {
+                    print($entry["name"]);
+                }
+
+                print("Keys ci apres");
+                var_dump(array_keys($entry));
+                unset($entry["_id"]);
+                var_dump(array_keys($entry));
+                foreach ($entry as $key => $value){
+                    print("Début var dump key\n");
+                    var_dump($key);
+                    print("Fin var dump key\n");
+                    var_dump($value);
+                    print("Fin var dump value\n");
+
+                    //print($key."\n");
+                    //print($value."\n");
+                }
+                
+                //$result.array_push($result, $document);
+            }
+            return $result;
+        } catch (Exception $e) {
+            die('Echec getDarwinInventors, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
     }
 
