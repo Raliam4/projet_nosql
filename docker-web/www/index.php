@@ -1,4 +1,5 @@
 <?php
+//phpinfo();
 require_once "Utils/functions.php"; //Pour avoir la fonction e()
 require_once "Models/Model.php"; //Inclusion du modèle
 require_once "Controllers/Controller.php"; //Inclusion de la classe Controller
