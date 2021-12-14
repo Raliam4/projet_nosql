@@ -43,36 +43,18 @@ class Model
             die('Echec connexion, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
 
-        try {
-            //$client = new MongoDB\Client("mongodb://genius:darwin@localhost:27017");
-
-            $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@localhost:27017");
-        
-            $listdatabases = new MongoDB\Driver\Command(["listDatabases" => 1]);
-            $res = $this->mongo->executeCommand("admin", $listdatabases);
-        
-            $databases = current($res->toArray());
-        
-            foreach ($databases->databases as $el) {
-            
-                echo $el->name . "\n";
-            }
-        
-        } catch (MongoDB\Driver\Exception\Exception $e) {
-        
-            $filename = basename(__FILE__);
-            
-            echo "The $filename script has experienced an error.\n"; 
-            echo "It failed with the following exception:\n";
-            
-            echo "Exception:", $e->getMessage(), "\n";
-            echo "In file:", $e->getFile(), "\n";
-            echo "On line:", $e->getLine(), "\n";       
-        }
-/*
-
         try{
             $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@web-mongoDB:27017/darwin_inventors");
+            print("Valeurs avant modifs :");
+            $res = $this->getDarwinInventors();
+            var_dump($res);
+            print("\n--------------------------------------\n");
+
+
+
+
+
+            print("Valeurs après modifs :");
             $res = $this->getDarwinInventors();
             var_dump($res);
             //printf("Test1\n");
@@ -122,7 +104,7 @@ class Model
         catch(Exception $e){
             die('Echec connexion MONGODB, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
-*/
+
     }
 
     /**
@@ -131,52 +113,19 @@ class Model
      */
     public function getDarwinInventors() {
         try {
-            /*
-            $query = new MongoDB\Driver\Query([]);
-            $rows = $this->mongo->executeQuery("darwin_inventors.darwin_inventors", $query);
-            $i = 0;
-            print $i;
-            foreach ($rows as $row) {
-                print $i;
-                if($row->name){
-                    print $row->name;
-                }
-                //print $row[1];
-                $i = $i +1;
-            }
-            */
             $filter = [];
             $options = [];
             $query = new MongoDB\Driver\Query($filter, $options);
             $cursor = $this->mongo->executeQuery("darwin_inventors.darwin_inventors", $query);
             $result = [];
             foreach ($cursor as $document) {
-                //var_dump($document);
-                //print(gettype($document->name));
-                print("Test ici");
+                $infos_inventeur = [];
                 $entry = json_decode(json_encode($document), true);
-                //print($entry["name"]);
-                print("Test here");
-                if(array_key_exists("name", $entry)) {
-                    print($entry["name"]);
-                }
-
-                print("Keys ci apres");
-                var_dump(array_keys($entry));
                 unset($entry["_id"]);
-                var_dump(array_keys($entry));
                 foreach ($entry as $key => $value){
-                    print("Début var dump key\n");
-                    var_dump($key);
-                    print("Fin var dump key\n");
-                    var_dump($value);
-                    print("Fin var dump value\n");
-
-                    //print($key."\n");
-                    //print($value."\n");
+                    $infos_inventeur[$key] = $value;
                 }
-                
-                //$result.array_push($result, $document);
+                array_push($result, $infos_inventeur);
             }
             return $result;
         } catch (Exception $e) {
@@ -184,6 +133,45 @@ class Model
         }
     }
 
+    /**
+     * Ajoute le darwin inventor passé en paramètre dans la base de données.
+     * @param [array] $document contient les informations
+     * @return [boolean] retourne true si la personne a été ajoutée dans la base de données, et false sinon
+     */
+    public function addDarwinInventor($info)
+    {
+        try {
+            $bulk = new MongoDB\Driver\BulkWrite;
+            $info_triees = array();
+            $marqueurs = ['name', 'death cause'];
+            foreach($marqueurs as $value) {
+                $info_triees = array_merge($info_triees, [$value => $infos[$value]]);
+            }
+            $document = json_encode($info_triees);
+            $bulk->insert($document);
+            $result = $this->mongo->executeBulkWrite($this->collection, $bulk);
+            return true;
+        } catch (Exception $e) {
+            die('Echec addDarwinInventor, erreur n°' . $e->getCode() . ':' . $e->getMessage());
+        }
+        return false;
+
+        /*
+        $bulk = new MongoDB\Driver\BulkWrite;
+        #$bulk->insert(['x' => 1]);
+        #$bulk->insert(['mydata' => 'alice']);
+        $bulk->insert(['mydata' => 'bob','alice']);
+        #$bulk->insert(['mydata' => 'bastien']);
+        $mongodb->executeBulkWrite('mydb.mycol', $bulk);
+        $filter = ['users' => 'pgsql'];
+        $options = [];
+        $query = new MongoDB\Driver\Query($filter, $options);
+        $cursor = $mongodb->executeQuery('mydb.mycol', $query);
+        foreach ($cursor as $document) {
+        var_dump($document);
+        }
+    */
+    }
 
     /**
      * Méthode permettant de récupérer un modèle car le constructeur est privé (Implémentation du Design Pattern Singleton)
