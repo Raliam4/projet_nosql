@@ -7,7 +7,6 @@
     <th>Birthplace</th>
     <th>Birthdate</th>
     <th>County</th>
-    <th>Story</th>
     <th>Motivation</th>
   </tr>
   <tr>
@@ -38,11 +37,6 @@
     <?php endif ?>
     <?php if($county !== null) : ?>
       <td><?= e($county)?></td>
-    <?php else :?>
-      <td><?= '???'?></td>
-    <?php endif ?>
-    <?php if($story !== null) : ?>
-      <td><?= e($story)?></td>
     <?php else :?>
       <td><?= '???'?></td>
     <?php endif ?>
