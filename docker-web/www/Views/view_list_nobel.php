@@ -18,5 +18,3 @@
   </tr>
 <?php endforeach?>
 </table>
-<button id="bouton_rnd" type="submit">Trouver 25 prix Nobel au hasard</button>
-<script src="Ajx/script.js"></script>
