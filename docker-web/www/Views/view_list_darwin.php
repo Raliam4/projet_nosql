@@ -7,7 +7,7 @@
   ?>
   <li>
     <ul>
-      <?php foreach $val as $key => $value?>
+      <?php foreach ($val as $key => $value) :?>
         <li><?= e($key)?> : <?= e($value)?></li>
       <?php endforeach?>
     </ul>

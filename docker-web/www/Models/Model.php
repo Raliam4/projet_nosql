@@ -31,80 +31,20 @@ class Model
      */
     private function __construct()
     {
-        
         try {
-            echo "<p>\n constructeur model \n</p><br/>";
             //include 'Utils/credentials.php';
             $this->bd = new PDO('pgsql:host=web-pgsql;port=5432;dbname=nobel_prices', 'toto', 'toto');
-            echo "<p>connection reussi !!!!!!! </p><br/>";
             $this->bd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->bd->query("SET nameS 'utf8'");
         } catch (PDOException $e) {
             die('Echec connexion, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
-
         try{
             $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@web-mongoDB:27017/darwin_inventors");
-            print("Valeurs avant modifs :");
-            $res = $this->getDarwinInventors();
-            var_dump($res);
-            print("\n--------------------------------------\n");
-
-
-
-
-
-            print("Valeurs après modifs :");
-            $res = $this->getDarwinInventors();
-            var_dump($res);
-            //printf("Test1\n");
-            //var_dump($this->mongo);
-            //printf("Test2\n");
-            //$this->collection = $this->mongo->darwin_inventors;
-            //var_dump($this->collection);
-            //printf("Test3\n");
-            /*
-            $filter = [];
-            $options = [];
-            $query = new MongoDB\Driver\Query($filter, $options);
-            $cursor = $this->mongo->executeQuery("darwin_inventors.darwin_inventors", $query);
-            $result = [];
-            foreach ($cursor as $document) {
-                $result.append($result, $document);
-            }
-            var_dump($result);
-            */
-            /* FONCTIONNE
-            $query = new MongoDB\Driver\Query([]);
-            $rows = $this->mongo->executeQuery("darwin_inventors.darwin_inventors", $query);
-            $i = 0;
-            print $i;
-            foreach ($rows as $row) {
-                print $i;
-                if($row->name){
-                    print $row->name;
-                }
-                //print $row[1];
-                $i = $i +1;
-            }
-            */
-            
-            
-            /*
-            $filter = ['users' => 'genius'];
-            $options = [
-                'sort' => ['_id' => -1],
-            ];
-            $query = new MongoDB\Driver\Query($filter, $options);
-            $cursor = $this->mongo->executeQuery('mydb.mycol', $query);
-            foreach ($cursor as $document) {
-                var_dump($document);
-            }*/
         }
         catch(Exception $e){
             die('Echec connexion MONGODB, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
-
     }
 
     /**
@@ -138,39 +78,23 @@ class Model
      * @param [array] $document contient les informations
      * @return [boolean] retourne true si la personne a été ajoutée dans la base de données, et false sinon
      */
-    public function addDarwinInventor($info)
+    public function addDarwinInventor($infos)
     {
         try {
             $bulk = new MongoDB\Driver\BulkWrite;
-            $info_triees = array();
-            $marqueurs = ['name', 'death cause'];
+            $info_triees = [];
+            $marqueurs = ['name', 'death_cause'];
             foreach($marqueurs as $value) {
-                $info_triees = array_merge($info_triees, [$value => $infos[$value]]);
+                $info_triees[$value] = $infos[$value];
             }
             $document = json_encode($info_triees);
-            $bulk->insert($document);
-            $result = $this->mongo->executeBulkWrite($this->collection, $bulk);
+            $bulk->insert(json_decode($document));
+            $result = $this->mongo->executeBulkWrite("darwin_inventors.darwin_inventors", $bulk);
             return true;
         } catch (Exception $e) {
             die('Echec addDarwinInventor, erreur n°' . $e->getCode() . ':' . $e->getMessage());
         }
         return false;
-
-        /*
-        $bulk = new MongoDB\Driver\BulkWrite;
-        #$bulk->insert(['x' => 1]);
-        #$bulk->insert(['mydata' => 'alice']);
-        $bulk->insert(['mydata' => 'bob','alice']);
-        #$bulk->insert(['mydata' => 'bastien']);
-        $mongodb->executeBulkWrite('mydb.mycol', $bulk);
-        $filter = ['users' => 'pgsql'];
-        $options = [];
-        $query = new MongoDB\Driver\Query($filter, $options);
-        $cursor = $mongodb->executeQuery('mydb.mycol', $query);
-        foreach ($cursor as $document) {
-        var_dump($document);
-        }
-    */
     }
 
     /**
