@@ -9,6 +9,13 @@ class Controller_set extends Controller{
     $this->render("form_add", $data);
   }
 
+  public function action_form_add_darwin(){
+    $mod = Model::getModel();
+    $req =$mod->getNbNobelPrizes();
+    $data = ['nb_nobels' => $req];
+    $this->render("form_add_darwin", $data);
+  }
+
   public function action_add(){
     $testn = "#^ +$#";//que des espaces
     $testy = "#^\d+$#";
@@ -25,8 +32,8 @@ class Controller_set extends Controller{
   public function action_add_darwin(){
     $testn = "#^ +$#";//que des espaces
     $testy = "#^\d+$#";
-    if(isset($_POST['name']) && isset($_POST['death_cause']))
-    && !preg_match($testn,$_POST['name']))
+    if(isset($_POST['name']) && isset($_POST['death_cause'])
+    && !preg_match($testn,$_POST['name'])
     && !preg_match($testn,$_POST['death_cause'])){
       $mod = MODEL::getModel();
       $mod->addDarwinInventor($_POST);
