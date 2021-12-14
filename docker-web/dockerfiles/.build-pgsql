@@ -1,2 +1,0 @@
-FROM postgres:alpine
-COPY database_nobel_psql.sql /docker-entrypoint-initdb.d/
