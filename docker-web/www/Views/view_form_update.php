@@ -7,7 +7,6 @@
 			<p> <label> Birth Date: <input type="text" name="birthdate" value="<?=$birthdate?>"/> </label> </p>
 			<p> <label> Birth Place: <input type="text" name="birthplace" value="<?=$birthplace?>"/> </label></p>
 			<p> <label> County: <input type="text" name="county" value="<?=$county?>"/> </label></p>
-      <p> <label> Story: <input type="text" name="story" value="<?=$story?>"/> </label></p>
 
 			<p>
         <?php foreach ($categories as $key => $value):?>
