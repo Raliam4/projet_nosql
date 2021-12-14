@@ -22,6 +22,19 @@ class Controller_set extends Controller{
     $this->render("message", ['title' => 'Wrong informations', 'message' => 'This nobel isn\'t added due to wrong informations']);
   }
 
+  public function action_add_darwin(){
+    $testn = "#^ +$#";//que des espaces
+    $testy = "#^\d+$#";
+    if(isset($_POST['name']) && isset($_POST['death_cause']))
+    && !preg_match($testn,$_POST['name']))
+    && !preg_match($testn,$_POST['death_cause'])){
+      $mod = MODEL::getModel();
+      $mod->addDarwinInventor($_POST);
+      $this->render("message", ['title' => 'Darwin added', 'message' => 'You successfully added a new Darwin inventor'] );
+    }
+    $this->render("message", ['title' => 'Wrong informations', 'message' => 'This darwin isn\'t added due to wrong informations']);
+  }
+
   public function action_remove(){
     $test = '#^\d+$#';
     $mod = Model::getModel();
