@@ -64,6 +64,20 @@ class Controller_list extends Controller{
   }
 
     /**
+     * Action pour récuppérer tous les prix darwin de MongoDB
+     */
+  public function action_last_darwin(){
+    $mod = Model::getModel();
+    $req =$mod->getDarwinInventors(); //ceci est un tableau de tableau
+    $nb_nobels = $mod->getNbNobelPrizes();
+    $data = [
+      'all_darwin' => $req,
+      'nb_nobels' => $nb_nobels
+              ];
+    $this->render("last_darwin", $data);
+  }
+
+    /**
      * Action par défaut du contrôleur (à définir dans les classes filles)
      */
     public function action_default(){
