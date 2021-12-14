@@ -44,6 +44,8 @@ class Model
         }
 
         try {
+            //$client = new MongoDB\Client("mongodb://genius:darwin@localhost:27017");
+
             $this->mongo = new MongoDB\Driver\Manager("mongodb://genius:darwin@localhost:27017");
         
             $listdatabases = new MongoDB\Driver\Command(["listDatabases" => 1]);
