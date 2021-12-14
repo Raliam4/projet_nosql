@@ -1,5 +1,5 @@
 <?php
-$dsn = 'mysql:host=localhost;dbname=nobel_prices';
-$login = 'remi';
-$mdp = 'Motdepasse95';
+$dsn = 'pgsql:host=localhost;dbname=nobel_prices';
+$login = 'toto';
+$mdp = 'toto';
 ?>
