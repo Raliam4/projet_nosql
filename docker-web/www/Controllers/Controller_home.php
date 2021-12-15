@@ -3,9 +3,9 @@
 class Controller_home extends Controller{
 
   public function action_home(){
-    echo "\n action home";
+    //echo "\n action home";
     $mod = Model::getModel();
-    echo " get model fait";
+    //echo " get model fait";
     $req =$mod->getNbNobelPrizes();
     $data = ['nb_nobels' => $req];
     $this->render("home", $data);
